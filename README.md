@@ -12,6 +12,7 @@
 
 <br><br>
 
+## **⚠️ WARNING: ONLY GOOGLE CHROME SUPPORT FOR NOW**
 ## ⚡ Installing / Getting started
 
 A quick guide of how to install and use XCreen.
