@@ -1,0 +1,6 @@
+*.png
+.png
+backup.txt
+debug.log
+Test
+helpers/__pycache__
