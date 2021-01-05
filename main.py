@@ -1,5 +1,7 @@
 import os
 import re
+import requests
+import json
 
 ## -- Rich Config
 from rich import print
@@ -8,6 +10,7 @@ console = Console()
 
 from time import sleep
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 ## -- Helpers
 from helpers.clear import clearTerminal
@@ -37,17 +40,16 @@ def create_screenshot_folder():
         search_for_subs_file(folder_name)
         
 
-
 def search_for_subs_file(folder_name):
-    if os.path.isfile("subs.txt"):
-        print("\n[bold green]:: subs.txt file found. [/]\n")
+    if os.path.isfile("subdomains.txt"):
+        print("\n[bold green]:: subdomains.txt file found. [/]\n")
         remove_empty_lines(folder_name)
     else:
-        print("\n[bold red][X] subs.txt file not found, please verify if the file exists or is in the same directory.[/]")
+        print("\n[bold red][X] subdomains.txt file not found, please verify if the file exists or is in the same directory.[/]")
 
 
 def remove_empty_lines(folder_name):
-    with open("subs.txt", "r+") as not_formated_file:
+    with open("subdomains.txt", "r+") as not_formated_file:
         lines = not_formated_file.readlines()
         not_formated_file.seek(0)
         not_formated_file.writelines(line for line in lines if line.strip())
@@ -56,9 +58,8 @@ def remove_empty_lines(folder_name):
     format_urls(folder_name)
 
 
-
 def format_urls(folder_name):
-    with open("subs.txt", "r+", encoding="utf8") as domains_file:
+    with open("subdomains.txt", "r+", encoding="utf8") as domains_file:
         file_content = domains_file.readlines()
 
     for domain_url in file_content:
@@ -68,11 +69,47 @@ def format_urls(folder_name):
             if not final_url.startswith("https://"):
                 formated_url = f"https://{final_url}"
                 sleep(0.5)
-                domain_screenshot(formated_url, folder_name)
+                check_website_connection(final_url, formated_url, folder_name)
         except Exception as error:
-            print(f"\n[bold red][X] - We are having problems in {formated_url} [/]\n")
+            print(f"\n[bold red]:: We are having problems in {formated_url} [/]\n")
             print(error)
             continue
+
+
+def check_website_connection(final_url, formated_url, folder_name):
+
+    try:
+        response = requests.get(formated_url)
+        if(response.status_code == 200):
+            check_domain(final_url, formated_url, folder_name)
+    except Exception:
+        print(f"[bold red]:: Can't connect on {formated_url} [/]")
+
+
+def check_domain(final_url, formated_url, folder_name):
+
+    domain_buy = f"https://sg.godaddy.com/domainfind/v1/search/exact?q={final_url}"
+    response = requests.request("GET", domain_buy)
+    get_json = response.json()
+
+    check_availability = get_json['ExactMatchDomain']['IsAvailable']
+    check_status = get_json['ExactMatchDomain']['AvailabilityStatus']
+    check_purchasable = get_json['ExactMatchDomain']['IsPurchasable']
+
+    print(f"\n[bold yellow]:: Checking if domain {final_url} is available for purchase on GoDaddy[/]")
+
+    if(check_status == 1000):
+        print(f"""
+:: Domain ~> {final_url}
+:: Domain Availability ~> {check_availability}
+:: Availability Status ~> {check_status}
+:: Is Purchasable ~> {check_purchasable}
+:: URL ~> https://sg.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck={final_url}\n
+        """)
+    else:
+        print("[bold red]:: Domain is not available to purchase[/]")
+
+    domain_screenshot(formated_url, folder_name)
 
 
 def domain_screenshot(formated_url, folder_name):
@@ -86,12 +123,15 @@ def domain_screenshot(formated_url, folder_name):
     chrome_profile.add_argument("--incognito")
     chrome_profile.add_argument("--disable-popup-blocking")
     chrome_profile.add_argument("--disable-gpu")
+    chrome_profile.add_argument("headless")
+    chrome_profile.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     chrome_manager = webdriver.Chrome(chromedriver_path, options=chrome_profile)
     chrome_manager.get(formated_url)
 
     os.chdir(folder_name)
     screenshot = re.sub("[:/]", "", formated_url)
+    print("[bold yellow]:: Saving screenshot[/]\n")
     chrome_manager.save_screenshot(screenshot + ".png")
 
     sleep(0.1)
