@@ -1,6 +1,6 @@
 # XCreen 📷
 
-<img src="./images/preview.png" width="500" height="300">
+<img src="./images/preview.png" width="500" height="400">
 
 <br><br>
 
