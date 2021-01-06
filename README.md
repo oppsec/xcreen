@@ -32,6 +32,13 @@ A quick guide of how to install and use XCreen.
 
 <br><br>
 
+### ✨ Features
+- Fast scan
+- Low memory and cpu consume
+- Check for domain availability on GoDaddy (beta)
+
+<br><br>
+
 ### 🔨 Contributing
 
 A quick guide of how to contribute with the project.
