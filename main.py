@@ -12,6 +12,7 @@ urllib3.disable_warnings()
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+
 ## -- Rich Config
 from rich import print
 from rich.console import Console
@@ -20,6 +21,7 @@ console = Console()
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
 
 ## -- Helpers
 from helpers.clear import clearTerminal
@@ -30,18 +32,18 @@ from helpers.urls_warning import warning_message
 def main():
     clearTerminal()
     print_ascii()
-    sleep(0.5)
+    sleep(0.2)
     create_screenshot_folder()
 
 
 def create_screenshot_folder():
-    folder_name = console.input("\n[bold yellow]:: Type the screenshots folder name ~> [/]")
+    folder_name = console.input("\n[bold magenta]:: Enter screenshot folder name ~> [/]")
     current_path = os.getcwd()
 
     if(os.path.isdir(folder_name)):
         console.print("[bold red]:: The folder {} already exists. [/]".format(folder_name))
     else:
-        console.print("[green]:: Folder [bold]{}[/] created successfully! [/]".format(folder_name))
+        console.print("[green]:: Folder [bold]{}[/] created! [/]".format(folder_name))
         os.mkdir(current_path + '/{}'.format(folder_name))
 
         warning_message()
@@ -51,7 +53,7 @@ def create_screenshot_folder():
 
 def search_for_subs_file(folder_name):
     if os.path.isfile("subdomains.txt"):
-        print("\n[bold green]:: subdomains.txt file found. [/]\n")
+        print("\n[bold green]:: subdomains.txt file found. [/]")
         remove_empty_lines(folder_name)
     else:
         print("\n[bold red][X] subdomains.txt file not found, please verify if the file exists or is in the same directory.[/]")
@@ -80,19 +82,20 @@ def format_urls(folder_name):
                 sleep(0.5)
                 check_website_connection(final_url, formated_url, folder_name)
         except Exception as error:
-            print(f"\n[bold red]:: We are having problems in {formated_url} [/]\n")
+            print(f"\n[bold red]:: Connection problems on {formated_url} [/]\n")
             print(error)
             continue
 
 
 def check_website_connection(final_url, formated_url, folder_name):
-
     try:
+        response = requests.get(formated_url, verify=False)
+
         if(response.status_code == 200):
-            response = requests.get(formated_url, verify=False)
             check_domain(final_url, formated_url, folder_name)
-    except Exception:
-        print(f"[bold red]:: Can't connect on {formated_url}[/]")
+    except Exception as error:
+        print(f"[bold yellow]:: Connection error on {formated_url}[/]")
+        print(error)
 
 
 def check_domain(final_url, formated_url, folder_name):
@@ -101,19 +104,17 @@ def check_domain(final_url, formated_url, folder_name):
     response = requests.request("GET", domain_buy)
     get_json = response.json()
 
-    check_availability = get_json['ExactMatchDomain']['IsAvailable']
     check_status = get_json['ExactMatchDomain']['AvailabilityStatus']
-    check_purchasable = get_json['ExactMatchDomain']['IsPurchasable']
+    check_buy_status = get_json['ExactMatchDomain']['IsPurchasable']
 
-    print(f"\n[bold yellow]:: Checking if domain {final_url} is available for purchase on GoDaddy[/]")
+    print(f"\n[bold magenta]:: Checking if domain {final_url} is available for purchase on GoDaddy (can be false positive)[/]")
 
     if(check_status == 1000):
         print(f"""
-:: Domain ~> {final_url}
-:: Domain Availability ~> {check_availability}
+:: Domain URL ~> {final_url}
 :: Availability Status ~> {check_status}
-:: Is Purchasable ~> {check_purchasable}
-:: URL ~> https://sg.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck={final_url}\n
+:: Is Purchasable ~> {check_buy_status}
+:: GoDaddy URL ~> https://sg.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck={final_url}\n
         """)
     else:
         print("[bold red]:: Domain is not available to purchase[/]")
