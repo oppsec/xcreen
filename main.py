@@ -141,7 +141,7 @@ def domain_screenshot(formated_url, folder_name):
 
     os.chdir(folder_name)
     screenshot = re.sub("[:/]", "", formated_url)
-    print("[bold yellow]:: Saving screenshot[/]\n")
+    print("[bold magenta]:: Saving screenshot[/]\n")
     chrome_manager.save_screenshot(screenshot + ".png")
 
     sleep(0.1)
