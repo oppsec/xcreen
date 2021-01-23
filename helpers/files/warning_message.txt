@@ -1,4 +1,3 @@
-[WARNING] The urls from subdomains text file cannot contain https:// or http:// before them
-
-[INFO] We recommend using the Sublist3r tool to avoid problems.
-[INFO] PRESS ENTER TO CONTINUE
+[INFO] :: The urls from subdomains text file cannot contain https:// or http:// before them.
+[INFO] :: We recommend using the Sublist3r tool to avoid problems.
+[INFO] :: Press ENTER to continue.
