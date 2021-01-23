@@ -1,7 +1,16 @@
 import os
 import re
 import requests
+import urllib3
 import json
+
+# -- Disable SSL warnings
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+urllib3.disable_warnings()
+
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 ## -- Rich Config
 from rich import print
@@ -79,11 +88,11 @@ def format_urls(folder_name):
 def check_website_connection(final_url, formated_url, folder_name):
 
     try:
-        response = requests.get(formated_url)
         if(response.status_code == 200):
+            response = requests.get(formated_url, verify=False)
             check_domain(final_url, formated_url, folder_name)
     except Exception:
-        print(f"[bold red]:: Can't connect on {formated_url} [/]")
+        print(f"[bold red]:: Can't connect on {formated_url}[/]")
 
 
 def check_domain(final_url, formated_url, folder_name):
