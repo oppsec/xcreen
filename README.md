@@ -1,6 +1,6 @@
 # XCreen 📷
 
-<img src="./images/preview.png" width="500" height="400">
+<img src="./images/xcreen_preview.png" width="500" height="300">
 
 <br><br>
 
@@ -12,7 +12,7 @@
 
 <br><br>
 
-## **⚠️ WARNING: ONLY GOOGLE CHROME SUPPORT FOR NOW**
+## **⚠️ WARNING: ONLY GOOGLE CHROME AND WINDOWS SUPPORT FOR NOW**
 ## ⚡ Installing / Getting started
 
 A quick guide of how to install and use XCreen.
