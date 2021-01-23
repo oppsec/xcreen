@@ -28,6 +28,7 @@ A quick guide of how to install and use XCreen.
 ### ⚙️ Pre-requisites
 - [Python 3](https://www.python.org/downloads/) installed on your machine.
 - Install the libraries with `pip install -r requirements.txt`
+- Google Chrome installed.
 
 <br><br>
 
