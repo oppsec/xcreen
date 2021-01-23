@@ -21,20 +21,19 @@ A quick guide of how to install and use XCreen.
 1. Clone the repository with git clone https://github.com/oppsec/xcreen.git
 2. Install the libraries with pip install -r requirements.txt
 3. Execute XCreen with python main.py (python 3)
-4. XCreen will start.
 ```
 
 <br><br>
 
 ### ⚙️ Pre-requisites
 - [Python 3](https://www.python.org/downloads/) installed on your machine.
-- All libraries instaled. (pip install r requirements.txt)
+- Install the libraries with `pip install -r requirements.txt`
 
 <br><br>
 
 ### ✨ Features
 - Fast scan
-- Low memory and cpu consume
+- Low RAM and CPU usage
 - Check for domain availability on GoDaddy (beta)
 
 <br><br>
