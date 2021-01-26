@@ -83,7 +83,6 @@ def format_urls(folder_name):
                 check_website_connection(final_url, formated_url, folder_name)
         except Exception as error:
             print(f"\n[bold red]:: Connection problems on {formated_url} [/]\n")
-            print(error)
             continue
 
 
@@ -95,7 +94,6 @@ def check_website_connection(final_url, formated_url, folder_name):
             check_domain(final_url, formated_url, folder_name)
     except Exception as error:
         print(f"[bold yellow]:: Connection error on {formated_url}[/]")
-        print(error)
 
 
 def check_domain(final_url, formated_url, folder_name):
