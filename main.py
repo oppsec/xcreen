@@ -4,16 +4,9 @@ import requests
 import urllib3
 import json
 
-# -- Disable SSL warnings
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-urllib3.disable_warnings()
-
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-
-## -- Rich Config
 from rich import print
 from rich.console import Console
 console = Console()
@@ -22,8 +15,6 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-
-## -- Helpers
 from helpers.clear import clearTerminal
 from helpers.ascii import print_ascii
 from helpers.urls_warning import warning_message
